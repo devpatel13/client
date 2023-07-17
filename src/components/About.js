@@ -1,7 +1,9 @@
 import { React, useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const About = () => {
+  const navigate = useNavigate();
+
   const [data, setData] = useState([]);
   useEffect(() => {
     fetch("/about", {
@@ -9,10 +11,24 @@ const About = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data, "userData");
-        setData(data.data);
+        if (data.success == false) {
+          window.alert("Please Login First");
+          console.log("Please Login First");
+          navigate("/login");
+        }
+        setData(data.user);
+        // console.log(data.user.name, "data");
       });
   }, []);
+  // console.log(data);
+  // const userCheck = (data) => {
+  //   if (data.success == false) {
+  //     window.alert("Please Login First");
+  //     console.log("Please Login First");
+  //     navigate("/login");
+  //   }
+  // };
+  // userCheck(data);
 
   return (
     <section
@@ -63,7 +79,7 @@ const About = () => {
                     <h5>Username:</h5>
                   </div>
                   <div className="col-4" style={{ paddingLeft: "40px" }}>
-                    <p>devanshu</p>
+                    <p>{data.name}</p>
                   </div>
                 </div>
 
@@ -72,7 +88,7 @@ const About = () => {
                     <h5>Email:</h5>
                   </div>
                   <div className="col-4" style={{ paddingLeft: "40px" }}>
-                    <p>devanshu</p>
+                    <p>{data.email}</p>
                   </div>
                 </div>
 
@@ -81,7 +97,7 @@ const About = () => {
                     <h5>Phone:</h5>
                   </div>
                   <div className="col-4" style={{ paddingLeft: "40px" }}>
-                    <p>1234567890</p>
+                    <p>{data.phone}</p>
                   </div>
                 </div>
                 <br />
